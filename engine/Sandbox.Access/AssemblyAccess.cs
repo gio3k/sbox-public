@@ -47,7 +47,10 @@ internal partial class AssemblyAccess
 
 		var readerParams = new ReaderParameters
 		{
-			ReadingMode = ReadingMode.Immediate, InMemory = true, AssemblyResolver = Global, ReadSymbols = true,
+			ReadingMode = ReadingMode.Immediate,
+			InMemory = true,
+			AssemblyResolver = Global,
+			ReadSymbols = true,
 		};
 
 		try
@@ -184,7 +187,7 @@ internal partial class AssemblyAccess
 	{
 		// Allow static array initializers
 		if ( type.DeclaringType?.Name == "<PrivateImplementationDetails>" &&
-		     type.Name.StartsWith( "__StaticArrayInitTypeSize=" ) )
+			 type.Name.StartsWith( "__StaticArrayInitTypeSize=" ) )
 			return true;
 
 		return false;
@@ -345,7 +348,7 @@ internal partial class AssemblyAccess
 			Touch( $"System.Private.CoreLib/System.Runtime.InteropServices.DllImportAttribute", "attribute" );
 
 		if ( member.DebugInformation.HasSequencePoints &&
-		     member.DebugInformation.SequencePoints.FirstOrDefault( x => !x.IsHidden ) is { } sequencePoint )
+			 member.DebugInformation.SequencePoints.FirstOrDefault( x => !x.IsHidden ) is { } sequencePoint )
 			UpdateLocation( sequencePoint );
 		else
 			Location = new AccessControl.CodeLocation( member.FullName );
@@ -431,9 +434,9 @@ internal partial class AssemblyAccess
 			if ( methodref.DeclaringType.IsArray )
 			{
 				if ( methodref.DeclaringType.GetElementType() is TypeReference
-				    {
-					    IsGenericParameter: true
-				    } elementType )
+					{
+						IsGenericParameter: true
+					} elementType )
 				{
 					// We can't Resolve() a generic this way
 					// Pass the element type to Touch(TypeReference) which should handle these gracefully
@@ -484,7 +487,7 @@ internal partial class AssemblyAccess
 			// We check against ldftn/ldvirtftn only as call is valid runtime usage from the compiler
 			//
 			if ( methodref.Name == Microsoft.CodeAnalysis.WellKnownMemberNames.DestructorName &&
-			     (instruction.OpCode.Code == Code.Ldftn || instruction.OpCode.Code == Code.Ldvirtftn) )
+				 (instruction.OpCode.Code == Code.Ldftn || instruction.OpCode.Code == Code.Ldvirtftn) )
 			{
 				// Dummy invalid method
 				Touch( $"System.Private.CoreLib/System.InvalidFinalizeMethodReference", "method" );
